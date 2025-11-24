@@ -317,7 +317,7 @@ export function Content() {
         />
       ) : null}
       <div
-        className={`absolute w-full h-full left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 ${revealOnHover ? 'reveal-mode' : ''} ${drawMode ? 'cursor-crosshair' : ''}`}
+        className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 ${revealOnHover ? 'reveal-mode' : ''} ${drawMode ? 'cursor-crosshair' : ''}`}
         ref={boundingBoxContainerRef}
         onPointerEnter={(e) => {
           if (revealOnHover && !drawMode) {
