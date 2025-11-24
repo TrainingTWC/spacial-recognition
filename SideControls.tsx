@@ -18,24 +18,28 @@
 // limitations under the License.
 
 import { useAtom } from 'jotai';
+import { Upload } from 'lucide-react';
 import {
   BumpSessionAtom,
+  DrawModeAtom,
   ImageSentAtom,
   ImageSrcAtom,
   IsUploadedImageAtom,
 } from './atoms';
 import { useResetState } from './hooks';
+import { ScreenshareButton } from './ScreenshareButton';
 
 export function SideControls() {
   const [, setImageSrc] = useAtom(ImageSrcAtom);
+  const [drawMode, setDrawMode] = useAtom(DrawModeAtom);
   const [, setIsUploadedImage] = useAtom(IsUploadedImageAtom);
   const [, setBumpSession] = useAtom(BumpSessionAtom);
   const [, setImageSent] = useAtom(ImageSentAtom);
   const resetState = useResetState();
 
   return (
-    <div className="mt-auto pt-4">
-      <label className="flex items-center justify-center w-full py-3 bg-black text-white rounded-full cursor-pointer font-medium hover:opacity-90 transition-opacity">
+    <div className="flex flex-col gap-4 w-full">
+      <label className="button primary w-full cursor-pointer">
         <input
           className="hidden"
           type="file"
@@ -55,8 +59,20 @@ export function SideControls() {
             }
           }}
         />
+        <Upload size={18} />
         <span>Upload Image</span>
       </label>
+      <div className="hidden">
+        <button
+          className="button flex gap-3 justify-center items-center"
+          onClick={() => {
+            setDrawMode(!drawMode);
+          }}>
+          <div className="text-lg"> 🎨</div>
+          <div>Draw on image</div>
+        </button>
+        <ScreenshareButton />
+      </div>
     </div>
   );
 }

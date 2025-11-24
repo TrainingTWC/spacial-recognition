@@ -200,7 +200,7 @@ export function Prompt() {
               ],
             },
           ],
-          config: config as any,
+          config,
         })
       ).text;
 
@@ -297,12 +297,28 @@ export function Prompt() {
   }
 
   return (
-    <div className="flex flex-col gap-2 h-full">
-      <div className="text-sm font-bold">Search For:</div>
-      <div className="flex flex-col grow">
+    <div className="flex grow flex-col gap-3">
+      <div className="flex justify-between items-center">
+        <div className="uppercase">
+          Prompt:{' '}
+          {detectType === '3D bounding boxes'
+            ? 'Gemini 2.0 Flash'
+            : 'Gemini 2.5 Flash (no thinking)'}
+        </div>
+        <label className="flex gap-2 select-none">
+          <input
+            type="checkbox"
+            checked={showRawPrompt}
+            onChange={() => setShowRawPrompt(!showRawPrompt)}
+            disabled={isLoading}
+          />
+          <div>show raw prompt</div>
+        </label>
+      </div>
+      <div className="w-full flex flex-col">
         {showCustomPrompt ? (
           <textarea
-            className="w-full h-40 border-2 border-black rounded-xl p-3 resize-none focus:outline-none"
+            className="w-full h-32 border-2 border-black rounded-xl p-3 resize-none focus:outline-none text-sm"
             value={customPrompts[detectType]}
             onChange={(e) => {
               const value = e.target.value;
@@ -319,7 +335,7 @@ export function Prompt() {
             disabled={isLoading}
           />
         ) : showRawPrompt ? (
-          <div className="mb-2 text-gray-500 text-sm">
+          <div className="mb-2 text-[var(--text-color-secondary)]">
             {is2d
               ? get2dPrompt()
               : detectType === 'Segmentation masks'
@@ -327,10 +343,12 @@ export function Prompt() {
                 : getGenericPrompt(detectType)}
           </div>
         ) : (
-          <div className="flex flex-col gap-2 h-full">
+          <div className="flex flex-col gap-2">
+            <div className="text-xs font-bold">{is2d ? 'Detect' : prompts[detectType][0]}</div>
             <textarea
-              className="w-full h-40 border-2 border-black rounded-xl p-3 resize-none focus:outline-none text-sm"
+              className="w-full h-24 border-2 border-black rounded-xl p-3 resize-none focus:outline-none text-sm"
               placeholder="What kind of things do you want to detect?"
+              rows={1}
               value={is2d ? targetPrompt : prompts[detectType][1]}
               onChange={(e) => {
                 if (is2d) {
@@ -353,51 +371,80 @@ export function Prompt() {
               disabled={isLoading}
             />
             {detectType === 'Segmentation masks' && (
-              <textarea
-                aria-label="Language for segmentation labels"
-                className="w-full h-10 border-2 border-black rounded-xl p-2 resize-none focus:outline-none text-sm mt-2"
-                placeholder="Language (e.g., Deutsch)"
-                value={segmentationLanguage}
-                onChange={(e) => setSegmentationLanguage(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !isLoading) {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-                disabled={isLoading}
-              />
+              <>
+                <div className="mt-1">
+                  Output labels in language: (e.g. Deutsch, Français, Español,
+                  中文)
+                </div>
+                <textarea
+                  aria-label="Language for segmentation labels"
+                  className="w-full bg-[var(--input-color)] rounded-lg resize-none p-4"
+                  rows={1}
+                  placeholder="e.g., Deutsch, Français, Español"
+                  value={segmentationLanguage}
+                  onChange={(e) => setSegmentationLanguage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !isLoading) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                  disabled={isLoading}
+                />
+              </>
             )}
             {is2d && (
-              <textarea
-                className="w-full h-10 border-2 border-black rounded-xl p-2 resize-none focus:outline-none text-sm mt-2"
-                placeholder="Label (optional)"
-                value={labelPrompt}
-                onChange={(e) => setLabelPrompt(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !isLoading) {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-                disabled={isLoading}
-              />
+              <>
+                <div>Label each one with: (optional)</div>
+                <textarea
+                  className="w-full bg-[var(--input-color)] rounded-lg resize-none p-4"
+                  rows={1}
+                  placeholder="How do you want to label the things?"
+                  value={labelPrompt}
+                  onChange={(e) => setLabelPrompt(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !isLoading) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                  disabled={isLoading}
+                />
+              </>
             )}
           </div>
         )}
       </div>
-
-      {/* Hidden controls that might be needed later or for debugging */}
-      <div className="hidden">
-        <label className="flex gap-2 select-none">
-          <input
-            type="checkbox"
-            checked={showRawPrompt}
-            onChange={() => setShowRawPrompt(!showRawPrompt)}
-            disabled={isLoading}
-          />
-          <div>show raw prompt</div>
-        </label>
+      <div className="flex justify-between gap-3">
+        <button
+          className={`bg-[#3B68FF] px-12 !text-white !border-none flex items-center justify-center ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={handleSend}
+          disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Sending...
+            </>
+          ) : (
+            'Send'
+          )}
+        </button>
         <label className="flex items-center gap-2">
           temperature:
           <input
@@ -412,13 +459,6 @@ export function Prompt() {
           {temperature.toFixed(2)}
         </label>
       </div>
-
-      <button
-        className={`w-full py-2 bg-transparent text-black font-bold border-2 border-black rounded-xl hover:bg-black hover:text-white transition-colors ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        onClick={handleSend}
-        disabled={isLoading}>
-        {isLoading ? 'Sending...' : 'Send Prompt'}
-      </button>
     </div>
   );
 }

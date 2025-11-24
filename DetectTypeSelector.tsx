@@ -18,45 +18,64 @@
 // limitations under the License.
 
 import { useAtom } from 'jotai';
+import { Box, Layers, MapPin, Box as Box3d } from 'lucide-react';
 import { DetectTypeAtom, HoverEnteredAtom } from './atoms';
 import { DetectTypes } from './Types';
 
 const DETECTION_TYPES = [
-  '2D bounding boxes',
-  'Segmentation masks',
-  'Points',
-  '3D bounding boxes',
+  { label: '2D bounding boxes', icon: Box },
+  { label: 'Segmentation masks', icon: Layers },
+  { label: 'Points', icon: MapPin },
+  { label: '3D bounding boxes', icon: Box3d },
 ] as const;
 
 export function DetectTypeSelector() {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="text-sm font-bold mb-2">Detection Type</div>
+    <div className="flex flex-col flex-shrink-0 gap-2">
+      <div className="text-xs font-bold text-[var(--text-color-secondary)] uppercase tracking-wide">
+        Detection Type
+      </div>
       <div className="flex flex-col gap-1">
-        {DETECTION_TYPES.map((label) => (
-          <SelectOption key={label} label={label} />
+        {DETECTION_TYPES.map(({ label, icon: Icon }) => (
+          <SelectOption key={label} label={label} icon={Icon} />
         ))}
       </div>
     </div>
   );
 }
 
-function SelectOption({ label }: { label: string }) {
+function SelectOption({
+  label,
+  icon: Icon,
+}: {
+  label: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+}) {
   const [detectType, setDetectType] = useAtom(DetectTypeAtom);
   const [, setHoverEntered] = useAtom(HoverEnteredAtom);
   const isActive = detectType === label;
 
   return (
     <button
-      className={`text-left py-1 text-sm ${isActive ? 'font-bold text-black' : 'text-gray-500 hover:text-black'
+      className={`card interactive flex items-center gap-4 px-6 py-5 text-left ${isActive ? 'active' : ''
         }`}
+      style={{
+        background: isActive
+          ? 'var(--gradient-primary)'
+          : 'var(--box-color)',
+        color: isActive ? 'white' : 'var(--text-color-primary)',
+        border: 'none',
+        minHeight: '64px',
+      }}
       onClick={() => {
         setHoverEntered(false);
         setDetectType(label as DetectTypes);
       }}>
-      {label === '2D bounding boxes' ? 'Boxes' :
-        label === 'Segmentation masks' ? 'Segments' :
-          label === '3D bounding boxes' ? '3D Boxes' : label}
+      <Icon
+        size={24}
+        className={isActive ? 'opacity-100' : 'opacity-60'}
+      />
+      <span className="font-medium">{label}</span>
     </button>
   );
 }
