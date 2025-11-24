@@ -76,15 +76,16 @@ function App() {
   }, [setDetectType]);
 
   return (
-    <div className="dashboard-container animate-fade-in">
+    <div className="dashboard-container animate-fade-in relative">
+      {/* Theme Toggle - Top Right Corner */}
+      <div className="absolute top-4 right-4 z-50">
+        <TopBar />
+      </div>
+
       {/* Sidebar (Left - 20%) */}
       <div className="sidebar">
-        {/* TopBar Elements integrated into Sidebar */}
         <div className="flex flex-col gap-4 mb-4">
-          <div className="flex items-center justify-between">
-            <span className="font-semibold text-lg text-[var(--text-primary)]">Spatial Understanding</span>
-            <TopBar />
-          </div>
+          <span className="font-semibold text-lg text-[var(--text-primary)]">Spatial Understanding</span>
         </div>
 
         <DetectTypeSelector />

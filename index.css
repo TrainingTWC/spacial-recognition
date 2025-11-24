@@ -26,6 +26,26 @@
     --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
     --shadow-glow: 0 0 15px rgba(139, 92, 246, 0.3);
 }
+/* Light Mode */
+:root:not(.dark) {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+
+    --accent-primary: #8b5cf6;
+    --accent-secondary: #22c55e;
+    --accent-glow: rgba(139, 92, 246, 0.3);
+
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+
+    --border-color: #e2e8f0;
+    --border-active: #8b5cf6;
+
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-glow: 0 0 15px rgba(139, 92, 246, 0.2);
+}
+
 
 html,
 body,
@@ -217,6 +237,26 @@ input[type="range"]::-webkit-slider-thumb {
     --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15);
     --shadow-glow: 0 0 15px rgba(139, 92, 246, 0.3);
 }
+/* Light Mode */
+:root:not(.dark) {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+
+    --accent-primary: #8b5cf6;
+    --accent-secondary: #22c55e;
+    --accent-glow: rgba(139, 92, 246, 0.3);
+
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+
+    --border-color: #e2e8f0;
+    --border-active: #8b5cf6;
+
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-glow: 0 0 15px rgba(139, 92, 246, 0.2);
+}
+
 
 html,
 body,
