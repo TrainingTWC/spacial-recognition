@@ -30,9 +30,11 @@ import { DetectTypes } from './Types';
 import {
   BumpSessionAtom,
   DetectTypeAtom,
+  HoverEnteredAtom,
   ImageSrcAtom,
   InitFinishedAtom,
   IsUploadedImageAtom,
+  RevealOnHoverModeAtom,
 } from './atoms';
 import { useResetState } from './hooks';
 import { hash } from './utils';
@@ -44,6 +46,8 @@ function App() {
   const [, setBumpSession] = useAtom(BumpSessionAtom);
   const [, setIsUploadedImage] = useAtom(IsUploadedImageAtom);
   const [, setDetectType] = useAtom(DetectTypeAtom);
+  const [revealOnHover, setRevealOnHoverMode] = useAtom(RevealOnHoverModeAtom);
+  const [, setHoverEntered] = useAtom(HoverEnteredAtom);
 
   useEffect(() => {
     if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -77,21 +81,53 @@ function App() {
   }, [setDetectType]);
 
   return (
-    <div className="flex flex-col h-[100dvh] animate-fade-in">
-      <div className="flex grow flex-col border-b overflow-hidden">
-        <TopBar />
-        {initFinished ? <Content /> : null}
-        <ExtraModeControls />
+    <div className="dashboard-container animate-fade-in">
+      {/* Sidebar */}
+      <div className="sidebar">
+        <DetectTypeSelector />
+        <Prompt />
+
+        {/* Visual Slider Placeholder */}
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between text-sm font-medium">
+            <span>General</span>
+            <span>Detailed</span>
+          </div>
+          <input type="range" min="0" max="100" defaultValue="50" disabled />
+        </div>
+
+        <SideControls />
       </div>
-      <div className="flex shrink-0 w-full overflow-auto py-8 px-8 gap-8 lg:items-start">
-        <div className="flex flex-col lg:flex-col gap-6 items-stretch border-r pr-8 min-w-[240px]">
-          <ExampleImages />
-          <SideControls />
+
+      {/* Main Content */}
+      <div className="main-content relative">
+        {/* Top Right Toggle */}
+        <div className="absolute top-4 right-6 z-10 flex items-center gap-2">
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <div className={`w-4 h-4 border-2 border-black flex items-center justify-center ${revealOnHover ? 'bg-black' : 'bg-white'}`}>
+              {revealOnHover && <span className="text-white text-xs">✓</span>}
+            </div>
+            <input
+              type="checkbox"
+              checked={revealOnHover}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setHoverEntered(false);
+                }
+                setRevealOnHoverMode(e.target.checked);
+              }}
+              className="hidden"
+            />
+            <span className="font-bold">Reveal On Hover</span>
+          </label>
         </div>
-        <div className="flex flex-row gap-8 grow">
-          <DetectTypeSelector />
-          <Prompt />
-        </div>
+
+        {initFinished ? <Content /> : (
+          <div className="w-full h-full flex items-center justify-center text-gray-400">
+            Upload an image to start
+          </div>
+        )}
+        <ExtraModeControls />
       </div>
     </div>
   );
