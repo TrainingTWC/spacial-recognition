@@ -17,10 +17,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {useAtom} from 'jotai';
+import { useAtom } from 'jotai';
 import getStroke from 'perfect-freehand';
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {ResizePayload, useResizeDetector} from 'react-resize-detector';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ResizePayload, useResizeDetector } from 'react-resize-detector';
 import {
   ActiveColorAtom,
   BoundingBoxes2DAtom,
@@ -37,8 +37,8 @@ import {
   ShareStream,
   VideoRefAtom,
 } from './atoms';
-import {lineOptions, segmentationColorsRgb} from './consts';
-import {getSvgPathFromStroke} from './utils';
+import { lineOptions, segmentationColorsRgb } from './consts';
+import { getSvgPathFromStroke } from './utils';
 
 export function Content() {
   const [imageSrc] = useAtom(ImageSrcAtom);
@@ -78,10 +78,10 @@ export function Content() {
     }
   }, []);
 
-  const {ref: containerRef} = useResizeDetector({onResize});
+  const { ref: containerRef } = useResizeDetector({ onResize });
 
   const boundingBoxContainer = useMemo(() => {
-    const {width, height} = activeMediaDimensions;
+    const { width, height } = activeMediaDimensions;
     const aspectRatio = width / height;
     const containerAspectRatio = containerDims.width / containerDims.height;
     if (aspectRatio < containerAspectRatio) {
@@ -111,7 +111,7 @@ export function Content() {
     let allLines = [];
     let allLabels = [];
     for (const box of boundingBoxes3D) {
-      const {center, size, rpy} = box;
+      const { center, size, rpy } = box;
 
       // Convert Euler angles to quaternion
       const [sr, sp, sy] = rpy.map((x) => Math.sin(x / 2));
@@ -223,7 +223,7 @@ export function Content() {
           const length = Math.sqrt(dx * dx + dy * dy);
           const angle = Math.atan2(dy, dx);
 
-          allLines.push({start, end, length, angle});
+          allLines.push({ start, end, length, angle });
         }
       }
 
@@ -244,7 +244,7 @@ export function Content() {
         textPoint[0] / textPoint[2],
         textPoint[1] / textPoint[2],
       ];
-      allLabels.push({label: box.label, pos: textPos});
+      allLabels.push({ label: box.label, pos: textPos });
     }
     return [allLines, allLabels] as const;
   }, [boundingBoxes3D, boundingBoxContainer, fov]);
@@ -252,7 +252,7 @@ export function Content() {
   function setHoveredBox(e: React.PointerEvent) {
     const boxes = document.querySelectorAll('.bbox');
     const dimensionsAndIndex = Array.from(boxes).map((box, i) => {
-      const {top, left, width, height} = box.getBoundingClientRect();
+      const { top, left, width, height } = box.getBoundingClientRect();
       return {
         top,
         left,
@@ -266,8 +266,8 @@ export function Content() {
       (a, b) => a.width * a.height - b.width * b.height,
     );
     // Find the smallest box that contains the mouse
-    const {clientX, clientY} = e;
-    const found = sorted.find(({top, left, width, height}) => {
+    const { clientX, clientY } = e;
+    const found = sorted.find(({ top, left, width, height }) => {
       return (
         clientX > left &&
         clientX < left + width &&
@@ -317,7 +317,7 @@ export function Content() {
         />
       ) : null}
       <div
-        className={`absolute w-full h-full left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 ${hoverEntered ? 'hide-box' : ''} ${drawMode ? 'cursor-crosshair' : ''}`}
+        className={`absolute w-full h-full left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 ${revealOnHover ? 'reveal-mode' : ''} ${drawMode ? 'cursor-crosshair' : ''}`}
         ref={boundingBoxContainerRef}
         onPointerEnter={(e) => {
           if (revealOnHover && !drawMode) {
@@ -340,9 +340,9 @@ export function Content() {
                   ...prev[prev.length - 1][0],
                   [
                     (e.clientX - parentBounds.left) /
-                      boundingBoxContainer!.width,
+                    boundingBoxContainer!.width,
                     (e.clientY - parentBounds.top) /
-                      boundingBoxContainer!.height,
+                    boundingBoxContainer!.height,
                   ],
                 ],
                 prev[prev.length - 1][1],
@@ -369,9 +369,9 @@ export function Content() {
                 [
                   [
                     (e.clientX - parentBounds.left) /
-                      boundingBoxContainer!.width,
+                    boundingBoxContainer!.width,
                     (e.clientY - parentBounds.top) /
-                      boundingBoxContainer!.height,
+                    boundingBoxContainer!.height,
                   ],
                 ],
                 activeColor,
@@ -549,7 +549,7 @@ function BoxMask({
     <canvas
       ref={canvasRef}
       className="absolute top-0 left-0 w-full h-full"
-      style={{opacity: 0.5}}
+      style={{ opacity: 0.5 }}
     />
   );
 }
