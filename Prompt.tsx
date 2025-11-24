@@ -298,24 +298,6 @@ export function Prompt() {
 
   return (
     <div className="flex grow flex-col gap-4">
-      <div className="flex justify-between items-center">
-        <div className="label-text">
-          Prompt:{' '}
-          {detectType === '3D bounding boxes'
-            ? 'Gemini 2.0 Flash'
-            : 'Gemini 2.5 Flash (no thinking)'}
-        </div>
-        <label className="flex gap-2 select-none text-[var(--text-secondary)] text-xs items-center cursor-pointer hover:text-[var(--text-primary)] transition-colors">
-          <input
-            type="checkbox"
-            checked={showRawPrompt}
-            onChange={() => setShowRawPrompt(!showRawPrompt)}
-            disabled={isLoading}
-            className="accent-[var(--accent-primary)]"
-          />
-          <div>show raw prompt</div>
-        </label>
-      </div>
       <div className="w-full flex flex-col grow">
         {showCustomPrompt ? (
           <textarea

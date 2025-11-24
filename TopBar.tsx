@@ -18,49 +18,68 @@
 // limitations under the License.
 
 import { useAtom } from 'jotai';
-import { RotateCcw } from 'lucide-react';
-import { DetectTypeAtom, HoverEnteredAtom, RevealOnHoverModeAtom } from './atoms';
+import { RotateCcw, Sun, Moon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { DetectTypeAtom, RevealOnHoverModeAtom } from './atoms';
 import { useResetState } from './hooks';
 
 export function TopBar() {
   const resetState = useResetState();
-  const [revealOnHover, setRevealOnHoverMode] = useAtom(RevealOnHoverModeAtom);
-  const [detectType] = useAtom(DetectTypeAtom);
-  const [, setHoverEntered] = useAtom(HoverEnteredAtom);
+  const [revealOnHover, setRevealOnHover] = useAtom(RevealOnHoverModeAtom);
+  const [, setDetectType] = useAtom(DetectTypeAtom);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    // Initialize theme from system preference or default to dark
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setIsDarkMode(prefersDark);
+    if (!prefersDark) {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.toggle('dark');
+  };
 
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex items-center gap-3">
+      {/* Theme Toggle */}
+      <button
+        onClick={toggleTheme}
+        className="p-2 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
+        aria-label="Toggle theme">
+        {isDarkMode ? (
+          <Sun className="w-4 h-4 text-[var(--text-secondary)]" />
+        ) : (
+          <Moon className="w-4 h-4 text-[var(--text-secondary)]" />
+        )}
+      </button>
+
+      {/* Reset Button */}
       <button
         onClick={() => {
           resetState();
+          setDetectType('2D bounding boxes');
         }}
-        className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors"
-        title="Reset session"
-      >
-        <RotateCcw size={18} />
+        className="p-2 rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
+        aria-label="Reset session">
+        <RotateCcw className="w-4 h-4 text-[var(--text-secondary)]" />
       </button>
 
-      {(detectType === '2D bounding boxes' || detectType === 'Segmentation masks') && (
-        <label className="cursor-pointer" title="Reveal on hover">
-          <input
-            type="checkbox"
-            checked={revealOnHover}
-            onChange={(e) => {
-              if (e.target.checked) {
-                setHoverEntered(false);
-              }
-              setRevealOnHoverMode(e.target.checked);
-            }}
-            className="hidden"
-          />
-          <span className={`text-xs font-medium px-2 py-1 rounded border ${revealOnHover
-              ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)]'
-              : 'text-[var(--text-secondary)] border-[var(--border-color)]'
-            }`}>
-            Reveal
-          </span>
-        </label>
-      )}
+      {/* Reveal on Hover Toggle */}
+      <label className="flex items-center gap-2 cursor-pointer select-none group">
+        <input
+          type="checkbox"
+          checked={revealOnHover}
+          onChange={(e) => setRevealOnHover(e.target.checked)}
+          className="accent-[var(--accent-primary)]"
+        />
+        <span className="text-xs text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">
+          Reveal
+        </span>
+      </label>
     </div>
   );
 }
