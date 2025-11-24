@@ -32,7 +32,7 @@ const DETECTION_TYPES = [
 export function DetectTypeSelector() {
   return (
     <div className="flex flex-col flex-shrink-0 gap-2">
-      <div className="text-xs font-bold text-[var(--text-color-secondary)] uppercase tracking-wide">
+      <div className="label-text">
         Detection Type
       </div>
       <div className="flex flex-col gap-1">
@@ -57,25 +57,17 @@ function SelectOption({
 
   return (
     <button
-      className={`card interactive flex items-center gap-4 px-6 py-5 text-left ${isActive ? 'active' : ''
-        }`}
-      style={{
-        background: isActive
-          ? 'var(--gradient-primary)'
-          : 'var(--box-color)',
-        color: isActive ? 'white' : 'var(--text-color-primary)',
-        border: 'none',
-        minHeight: '64px',
-      }}
+      className={`nav-item w-full ${isActive ? 'active' : ''}`}
       onClick={() => {
         setHoverEntered(false);
         setDetectType(label as DetectTypes);
-      }}>
+      }}
+    >
       <Icon
-        size={24}
-        className={isActive ? 'opacity-100' : 'opacity-60'}
+        size={20}
+        className={isActive ? 'text-[var(--accent-primary)]' : 'text-[var(--text-secondary)]'}
       />
-      <span className="font-medium">{label}</span>
+      <span className="font-medium text-sm">{label}</span>
     </button>
   );
 }

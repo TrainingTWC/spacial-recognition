@@ -38,8 +38,8 @@ export function SideControls() {
   const resetState = useResetState();
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <label className="button primary w-full cursor-pointer">
+    <div className="flex flex-col gap-4 w-full mt-auto">
+      <label className="btn-primary w-full cursor-pointer flex items-center justify-center gap-2">
         <input
           className="hidden"
           type="file"
