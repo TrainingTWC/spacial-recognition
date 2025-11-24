@@ -91,7 +91,7 @@ body {
     box-shadow: var(--shadow-card);
     display: flex;
     /* Ensure flex layout for Content growth */
-    flex-direction: column;
+    flex-direction: column;`r`n    padding-top: 60px; /* Add space at top for theme toggle alignment */
 }
 
 /* Typography */
@@ -302,7 +302,7 @@ body {
     box-shadow: var(--shadow-card);
     display: flex;
     /* Ensure flex layout for Content growth */
-    flex-direction: column;
+    flex-direction: column;`r`n    padding-top: 60px; /* Add space at top for theme toggle alignment */
 }
 
 /* Typography */
