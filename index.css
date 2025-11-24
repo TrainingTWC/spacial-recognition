@@ -45,7 +45,7 @@ body {
 /* Dashboard Layout Utilities */
 .dashboard-container {
     display: grid;
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 20% 1fr;
     height: 100vh;
     padding: 16px;
     gap: 16px;
@@ -58,7 +58,7 @@ body {
     gap: 20px;
     height: 100%;
     overflow-y: auto;
-    padding-right: 8px;
+    padding-right: 0;
 }
 
 .main-content {

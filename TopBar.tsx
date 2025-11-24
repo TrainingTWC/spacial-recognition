@@ -29,40 +29,38 @@ export function TopBar() {
   const [, setHoverEntered] = useAtom(HoverEnteredAtom);
 
   return (
-    <div className="flex w-full items-center px-6 py-4 border-b justify-between glass">
-      <div className="flex gap-4 items-center">
-        <button
-          onClick={() => {
-            resetState();
-          }}
-          className="ghost icon-only"
-          title="Reset session"
-          style={{
-            minHeight: '40px',
-          }}>
-          <RotateCcw size={18} />
-        </button>
-        <span className="font-semibold text-lg">Spatial Understanding</span>
-      </div>
-      <div className="flex gap-4 items-center">
-        {detectType === '2D bounding boxes' ||
-          detectType === 'Segmentation masks' ? (
-          <label className="flex items-center gap-3 px-4 py-2 select-none whitespace-nowrap cursor-pointer rounded-full bg-[var(--bg-secondary)] transition-all hover:bg-[var(--border-color)]">
-            <input
-              type="checkbox"
-              checked={revealOnHover}
-              onChange={(e) => {
-                if (e.target.checked) {
-                  setHoverEntered(false);
-                }
-                setRevealOnHoverMode(e.target.checked);
-              }}
-              className="cursor-pointer"
-            />
-            <span className="text-sm font-medium">Reveal on hover</span>
-          </label>
-        ) : null}
-      </div>
+    <div className="flex gap-2 items-center">
+      <button
+        onClick={() => {
+          resetState();
+        }}
+        className="text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors"
+        title="Reset session"
+      >
+        <RotateCcw size={18} />
+      </button>
+
+      {(detectType === '2D bounding boxes' || detectType === 'Segmentation masks') && (
+        <label className="cursor-pointer" title="Reveal on hover">
+          <input
+            type="checkbox"
+            checked={revealOnHover}
+            onChange={(e) => {
+              if (e.target.checked) {
+                setHoverEntered(false);
+              }
+              setRevealOnHoverMode(e.target.checked);
+            }}
+            className="hidden"
+          />
+          <span className={`text-xs font-medium px-2 py-1 rounded border ${revealOnHover
+              ? 'bg-[var(--accent-primary)] text-white border-[var(--accent-primary)]'
+              : 'text-[var(--text-secondary)] border-[var(--border-color)]'
+            }`}>
+            Reveal
+          </span>
+        </label>
+      )}
     </div>
   );
 }

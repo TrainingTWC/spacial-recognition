@@ -76,20 +76,26 @@ function App() {
   }, [setDetectType]);
 
   return (
-    <div className="flex flex-col h-[100dvh] animate-fade-in">
-      <div className="flex grow flex-col border-b overflow-hidden">
-        <TopBar />
+    <div className="dashboard-container animate-fade-in">
+      {/* Sidebar (Left - 20%) */}
+      <div className="sidebar">
+        {/* TopBar Elements integrated into Sidebar */}
+        <div className="flex flex-col gap-4 mb-4">
+          <div className="flex items-center justify-between">
+            <span className="font-semibold text-lg text-[var(--text-primary)]">Spatial Understanding</span>
+            <TopBar />
+          </div>
+        </div>
+
+        <DetectTypeSelector />
+        <Prompt />
+        <SideControls />
+      </div>
+
+      {/* Main Content (Right - 80%) */}
+      <div className="main-content">
         {initFinished ? <Content /> : null}
         <ExtraModeControls />
-      </div>
-      <div className="flex shrink-0 w-full overflow-auto py-8 px-8 gap-8 lg:items-start">
-        <div className="flex flex-col lg:flex-col gap-6 items-stretch border-r pr-8 min-w-[240px]">
-          <SideControls />
-        </div>
-        <div className="flex flex-row gap-8 grow">
-          <DetectTypeSelector />
-          <Prompt />
-        </div>
       </div>
     </div>
   );
