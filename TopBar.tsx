@@ -1,7 +1,7 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
-*/
+ */
 /* tslint:disable */
 // Copyright 2024 Google LLC
 
@@ -17,9 +17,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {useAtom} from 'jotai';
-import {DetectTypeAtom, HoverEnteredAtom, RevealOnHoverModeAtom} from './atoms';
-import {useResetState} from './hooks';
+import { useAtom } from 'jotai';
+import { RotateCcw } from 'lucide-react';
+import { DetectTypeAtom, HoverEnteredAtom, RevealOnHoverModeAtom } from './atoms';
+import { useResetState } from './hooks';
 
 export function TopBar() {
   const resetState = useResetState();
@@ -28,37 +29,38 @@ export function TopBar() {
   const [, setHoverEntered] = useAtom(HoverEnteredAtom);
 
   return (
-    <div className="flex w-full items-center px-3 py-2 border-b justify-between">
-      <div className="flex gap-3 items-center">
+    <div className="flex w-full items-center px-6 py-4 border-b justify-between glass">
+      <div className="flex gap-4 items-center">
         <button
           onClick={() => {
             resetState();
           }}
-          className="!p-0 !border-none underline bg-transparent"
+          className="ghost icon-only"
+          title="Reset session"
           style={{
-            minHeight: '0',
+            minHeight: '40px',
           }}>
-          <div>Reset session</div>
+          <RotateCcw size={18} />
         </button>
+        <span className="font-semibold text-lg">Spatial Understanding</span>
       </div>
-      <div className="flex gap-3 items-center">
+      <div className="flex gap-4 items-center">
         {detectType === '2D bounding boxes' ||
-        detectType === 'Segmentation masks' ? (
-          <div>
-            <label className="flex items-center gap-2 px-3 select-none whitespace-nowrap">
-              <input
-                type="checkbox"
-                checked={revealOnHover}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setHoverEntered(false);
-                  }
-                  setRevealOnHoverMode(e.target.checked);
-                }}
-              />
-              <div>reveal on hover</div>
-            </label>
-          </div>
+          detectType === 'Segmentation masks' ? (
+          <label className="flex items-center gap-3 px-4 py-2 select-none whitespace-nowrap cursor-pointer rounded-full bg-[var(--bg-secondary)] transition-all hover:bg-[var(--border-color)]">
+            <input
+              type="checkbox"
+              checked={revealOnHover}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setHoverEntered(false);
+                }
+                setRevealOnHoverMode(e.target.checked);
+              }}
+              className="cursor-pointer"
+            />
+            <span className="text-sm font-medium">Reveal on hover</span>
+          </label>
         ) : null}
       </div>
     </div>

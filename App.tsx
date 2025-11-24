@@ -17,16 +17,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {useAtom} from 'jotai';
-import {useEffect} from 'react';
-import {Content} from './Content';
-import {DetectTypeSelector} from './DetectTypeSelector';
-import {ExampleImages} from './ExampleImages';
-import {ExtraModeControls} from './ExtraModeControls';
-import {Prompt} from './Prompt';
-import {SideControls} from './SideControls';
-import {TopBar} from './TopBar';
-import {DetectTypes} from './Types';
+import { useAtom } from 'jotai';
+import { useEffect } from 'react';
+import { Content } from './Content';
+import { DetectTypeSelector } from './DetectTypeSelector';
+import { ExampleImages } from './ExampleImages';
+import { ExtraModeControls } from './ExtraModeControls';
+import { Prompt } from './Prompt';
+import { SideControls } from './SideControls';
+import { TopBar } from './TopBar';
+import { DetectTypes } from './Types';
 import {
   BumpSessionAtom,
   DetectTypeAtom,
@@ -34,8 +34,8 @@ import {
   InitFinishedAtom,
   IsUploadedImageAtom,
 } from './atoms';
-import {useResetState} from './hooks';
-import {hash} from './utils';
+import { useResetState } from './hooks';
+import { hash } from './utils';
 
 function App() {
   const [, setImageSrc] = useAtom(ImageSrcAtom);
@@ -77,18 +77,18 @@ function App() {
   }, [setDetectType]);
 
   return (
-    <div className="flex flex-col h-[100dvh]">
+    <div className="flex flex-col h-[100dvh] animate-fade-in">
       <div className="flex grow flex-col border-b overflow-hidden">
         <TopBar />
         {initFinished ? <Content /> : null}
         <ExtraModeControls />
       </div>
-      <div className="flex shrink-0 w-full overflow-auto py-6 px-5 gap-6 lg:items-start">
-        <div className="flex flex-col lg:flex-col gap-6 items-center border-r pr-5">
+      <div className="flex shrink-0 w-full overflow-auto py-8 px-8 gap-8 lg:items-start">
+        <div className="flex flex-col lg:flex-col gap-6 items-stretch border-r pr-8 min-w-[240px]">
           <ExampleImages />
           <SideControls />
         </div>
-        <div className="flex flex-row gap-6 grow">
+        <div className="flex flex-row gap-8 grow">
           <DetectTypeSelector />
           <Prompt />
         </div>

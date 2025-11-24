@@ -1,7 +1,7 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
-*/
+ */
 /* tslint:disable */
 // Copyright 2024 Google LLC
 
@@ -17,7 +17,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {useAtom} from 'jotai';
+import { useAtom } from 'jotai';
+import { Upload } from 'lucide-react';
 import {
   BumpSessionAtom,
   DrawModeAtom,
@@ -25,8 +26,8 @@ import {
   ImageSrcAtom,
   IsUploadedImageAtom,
 } from './atoms';
-import {useResetState} from './hooks';
-import {ScreenshareButton} from './ScreenshareButton';
+import { useResetState } from './hooks';
+import { ScreenshareButton } from './ScreenshareButton';
 
 export function SideControls() {
   const [, setImageSrc] = useAtom(ImageSrcAtom);
@@ -37,8 +38,8 @@ export function SideControls() {
   const resetState = useResetState();
 
   return (
-    <div className="flex flex-col gap-3">
-      <label className="flex items-center button bg-[#3B68FF] px-12 !text-white !border-none">
+    <div className="flex flex-col gap-4 w-full">
+      <label className="button primary w-full cursor-pointer">
         <input
           className="hidden"
           type="file"
@@ -58,7 +59,8 @@ export function SideControls() {
             }
           }}
         />
-        <div>Upload an image</div>
+        <Upload size={18} />
+        <span>Upload Image</span>
       </label>
       <div className="hidden">
         <button
