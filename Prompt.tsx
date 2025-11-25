@@ -40,6 +40,7 @@ import {
 import { lineOptions } from './consts';
 import { DetectTypes } from './Types';
 import { getSvgPathFromStroke, loadImage } from './utils';
+import { getTWCProductList, getTWCProductContext } from './brandConfig';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 export function Prompt() {
@@ -59,6 +60,7 @@ export function Prompt() {
   const [labelPrompt, setLabelPrompt] = useState('');
   const [segmentationLanguage, setSegmentationLanguage] = useState('English');
   const [showRawPrompt, setShowRawPrompt] = useState(false);
+  const [useBrandKnowledge, setUseBrandKnowledge] = useState(true); // Enable TWC brand detection by default
 
   const [prompts, setPrompts] = useAtom(PromptsAtom);
   const [customPrompts, setCustomPrompts] = useAtom(CustomPromptsAtom);
@@ -66,15 +68,31 @@ export function Prompt() {
 
   const is2d = detectType === '2D bounding boxes';
 
-  const get2dPrompt = () =>
-    `Detect ${targetPrompt}, with no more than 20 items. Output a json list where each entry contains the 2D bounding box in "box_2d" and ${labelPrompt || 'a text label'
-    } in "label".`;
+  const get2dPrompt = () => {
+    let basePrompt = `Detect ${targetPrompt}, with no more than 20 items.`;
+
+    // Add Third Wave Coffee brand knowledge
+    if (useBrandKnowledge) {
+      const productContext = getTWCProductContext();
+      basePrompt += ` You are detecting items from Third Wave Coffee. Known products include: ${productContext}. When you see these products, use their exact brand names.`;
+    }
+
+    basePrompt += ` Output a json list where each entry contains the 2D bounding box in "box_2d" and ${labelPrompt || 'the specific product name (e.g., "Orange Zest Mocha", "Tiramisu Frappe")'} in "label".`;
+
+    return basePrompt;
+  };
 
   const getSegmentationPrompt = () => {
     const promptParts = prompts['Segmentation masks'];
     const prefix = promptParts[0];
-    const items = promptParts[1]; // User-editable "items"
+    let items = promptParts[1]; // User-editable "items"
     let suffix = promptParts[2];
+
+    // Add Third Wave Coffee brand knowledge
+    if (useBrandKnowledge) {
+      const productList = getTWCProductList();
+      items = `Third Wave Coffee products such as ${productList}, or ${items}`;
+    }
 
     const originalLabelInstruction =
       ' text label in the key "label". Use descriptive labels.';
@@ -397,6 +415,28 @@ export function Prompt() {
           </div>
         )}
       </div>
+
+      {/* TWC Brand Mode Toggle */}
+      <div className="flex items-center gap-2 py-2 border-t border-[var(--border-color)]">
+        <label className="flex items-center gap-2 cursor-pointer select-none group flex-1">
+          <input
+            type="checkbox"
+            checked={useBrandKnowledge}
+            onChange={(e) => setUseBrandKnowledge(e.target.checked)}
+            disabled={isLoading}
+            className="accent-[var(--accent-primary)]"
+          />
+          <span className="text-xs text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">
+            🔥 TWC Brand Mode
+          </span>
+        </label>
+        {useBrandKnowledge && (
+          <span className="text-xs text-[var(--accent-primary)] font-medium">
+            Detecting TWC products
+          </span>
+        )}
+      </div>
+
       <div className="flex justify-between gap-4 items-center mt-auto pt-4 border-t border-[var(--border-color)]">
         <button
           className={`btn-primary flex-grow flex items-center justify-center ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
