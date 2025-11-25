@@ -64,7 +64,7 @@ body {
 
 /* Dashboard Layout Utilities */
 .dashboard-container {
-    display: grid; !important;
+    display: grid !important;
     grid-template-columns: 20% 1fr !important;
     height: 100vh;
     padding: 16px;
@@ -275,7 +275,7 @@ body {
 
 /* Dashboard Layout Utilities */
 .dashboard-container {
-    display: grid; !important;
+    display: grid !important;
     grid-template-columns: 20% 1fr !important;
     height: 100vh;
     padding: 16px;
